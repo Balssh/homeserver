@@ -16,11 +16,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adguard.entrypoints=http"
-      - "traefik.http.routers.adguard.rule=Host(`adguard.balssh.com`)"
+      - "traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)"
       - "traefik.http.middlewares.adguard-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.adguard.middlewares=adguard-https-redirect"
       - "traefik.http.routers.adguard-secure.entrypoints=https"
-      - "traefik.http.routers.adguard-secure.rule=Host(`adguard.balssh.com`)"
+      - "traefik.http.routers.adguard-secure.rule=Host(`adguard.${DOMAIN}`)"
       - "traefik.http.routers.adguard-secure.tls=true"
       - "traefik.http.routers.adguard-secure.tls.certresolver=cloudflare"
       # This is inially on port 3000 and after the setup change to port 80
