@@ -1,0 +1,31 @@
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    networks:
+      proxy:
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+    volumes:
+      - ./appdata/work:/opt/adguardhome/work
+      - ./confdir/conf:/opt/adguardhome/conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguard.entrypoints=http"
+      - "traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)"
+      - "traefik.http.middlewares.adguard-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.adguard.middlewares=adguard-https-redirect"
+      - "traefik.http.routers.adguard-secure.entrypoints=https"
+      - "traefik.http.routers.adguard-secure.rule=Host(`adguard.${DOMAIN}`)"
+      - "traefik.http.routers.adguard-secure.tls=true"
+      - "traefik.http.routers.adguard-secure.tls.certresolver=cloudflare"
+      # This is inially on port 3000 and after the setup change to port 80
+      - "traefik.http.services.adguard.loadbalancer.server.port=80"
+
+networks:
+  proxy:
+    external: true
