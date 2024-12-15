@@ -15,14 +15,14 @@ services:
       - /data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.entrypoints=http"
+      - "traefik.http.routers.jellyfin.entrypoints=web"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)"
       - "traefik.http.routers.jellyfin.tls=true"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
       - "traefik.http.routers.jellyfin.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
-      - "traefik.http.routers.jellyfin-secure.entrypoints=https"
+      - "traefik.http.routers.jellyfin-secure.entrypoints=web-secure"
       - "traefik.http.routers.jellyfin-secure.rule=Host(`jellyfin.${DOMAIN}`)"
       - "traefik.http.routers.jellyfin-secure.tls=true"
       - "traefik.http.routers.jellyfin-secure.tls.certresolver=cloudflare"
@@ -43,14 +43,14 @@ services:
       - /data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.entrypoints=http"
+      - "traefik.http.routers.sonarr.entrypoints=web"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
       - "traefik.http.routers.sonarr.tls=true"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
       - "traefik.http.routers.sonarr.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.sonarr-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.sonarr.middlewares=sonarr-https-redirect"
-      - "traefik.http.routers.sonarr-secure.entrypoints=https"
+      - "traefik.http.routers.sonarr-secure.entrypoints=web-secure"
       - "traefik.http.routers.sonarr-secure.rule=Host(`sonarr.${DOMAIN}`)"
       - "traefik.http.routers.sonarr-secure.tls=true"
       - "traefik.http.routers.sonarr-secure.tls.certresolver=cloudflare"
@@ -71,14 +71,14 @@ services:
       - /data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.radarr.entrypoints=http"
+      - "traefik.http.routers.radarr.entrypoints=web"
       - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)"
       - "traefik.http.routers.radarr.tls=true"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
       - "traefik.http.routers.radarr.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.radarr-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.radarr.middlewares=radarr-https-redirect"
-      - "traefik.http.routers.radarr-secure.entrypoints=https"
+      - "traefik.http.routers.radarr-secure.entrypoints=web-secure"
       - "traefik.http.routers.radarr-secure.rule=Host(`radarr.${DOMAIN}`)"
       - "traefik.http.routers.radarr-secure.tls=true"
 
@@ -127,14 +127,14 @@ services:
       - /data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.bazarr.entrypoints=http"
+      - "traefik.http.routers.bazarr.entrypoints=web"
       - "traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)"
       - "traefik.http.routers.bazarr.tls=true"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
       - "traefik.http.routers.bazarr.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.bazarr-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.bazarr.middlewares=bazarr-https-redirect"
-      - "traefik.http.routers.bazarr-secure.entrypoints=https"
+      - "traefik.http.routers.bazarr-secure.entrypoints=web-secure"
       - "traefik.http.routers.bazarr-secure.rule=Host(`bazarr.${DOMAIN}`)"
       - "traefik.http.routers.bazarr-secure.tls=true"
 
@@ -155,14 +155,14 @@ services:
       - /data/torrents:/data/torrents
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.qbittorent.entrypoints=http"
+      - "traefik.http.routers.qbittorent.entrypoints=web"
       - "traefik.http.routers.qbittorent.rule=Host(`qbittorent.${DOMAIN}`)"
       - "traefik.http.routers.qbittorent.tls=true"
       - "traefik.http.services.qbittorent.loadbalancer.server.port=8080"
       - "traefik.http.routers.qbittorent.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.qbittorent-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.qbittorent.middlewares=qbittorent-https-redirect"
-      - "traefik.http.routers.qbittorent-secure.entrypoints=https"
+      - "traefik.http.routers.qbittorent-secure.entrypoints=web-secure"
       - "traefik.http.routers.qbittorent-secure.rule=Host(`qbittorent.${DOMAIN}`)"
       - "traefik.http.routers.qbittorent-secure.tls=true"
 
@@ -181,14 +181,14 @@ services:
       - ./prowlarr:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prowlarr.entrypoints=http"
+      - "traefik.http.routers.prowlarr.entrypoints=web"
       - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)"
       - "traefik.http.routers.prowlarr.tls=true"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
       - "traefik.http.routers.prowlarr.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.prowlarr-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.prowlarr.middlewares=prowlarr-https-redirect"
-      - "traefik.http.routers.prowlarr-secure.entrypoints=https"
+      - "traefik.http.routers.prowlarr-secure.entrypoints=web-secure"
       - "traefik.http.routers.prowlarr-secure.rule=Host(`prowlarr.${DOMAIN}`)"
       - "traefik.http.routers.prowlarr-secure.tls=true"
 
@@ -206,14 +206,14 @@ services:
       - TZ=${TIMEZONE}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flaresolverr.entrypoints=http"
+      - "traefik.http.routers.flaresolverr.entrypoints=web"
       - "traefik.http.routers.flaresolverr.rule=Host(`flaresolverr.${DOMAIN}`)"
       - "traefik.http.routers.flaresolverr.tls=true"
       - "traefik.http.services.flaresolverr.loadbalancer.server.port=8191"
       - "traefik.http.routers.flaresolverr.tls.certresolver=cloudflare"
       - "traefik.http.middlewares.flaresolverr-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.flaresolverr.middlewares=flaresolverr-https-redirect"
-      - "traefik.http.routers.flaresolverr-secure.entrypoints=https"
+      - "traefik.http.routers.flaresolverr-secure.entrypoints=web-secure"
       - "traefik.http.routers.flaresolverr-secure.rule=Host(`flaresolverr.${DOMAIN}`)"
       - "traefik.http.routers.flaresolverr-secure.tls=true"
 
