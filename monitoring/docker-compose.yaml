@@ -1,0 +1,29 @@
+services:
+  glance:
+    image: glanceapp/glance:latest
+    container_name: glance
+    volumes:
+      - ${CONFIG_ROOT}/glance/glance.yml:/app/glance.yml
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    hostname: glance
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.glance.entrypoints=web"
+      - "traefik.http.routers.glance.rule=Host(`glance.${DOMAIN}`)"
+      - "traefik.http.routers.glance.tls=true"
+      - "traefik.http.services.glance.loadbalancer.server.port=8080"
+      - "traefik.http.routers.glance.tls.certresolver=cloudflare"
+      - "traefik.http.middlewares.glance-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.glance.middlewares=glance-https-redirect"
+      - "traefik.http.routers.glance-secure.entrypoints=web-secure"
+      - "traefik.http.routers.glance-secure.rule=Host(`glance.${DOMAIN}`)"
+      - "traefik.http.routers.glance-secure.tls=true"
+      - "traefik.http.routers.glance-secure.tls.certresolver=cloudflare"
+
+networks:
+  proxy:
+    external: true
