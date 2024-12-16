@@ -11,7 +11,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./jellyfin:/config
+      - ${CONFIG_ROOT}/jellyfin:/config
       - /data:/data
     labels:
       - "traefik.enable=true"
@@ -39,7 +39,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./sonarr:/config
+      - ${CONFIG_ROOT}/sonarr:/config
       - /data:/data
     labels:
       - "traefik.enable=true"
@@ -67,7 +67,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./radarr:/config
+      - ${CONFIG_ROOT}/radarr:/config
       - /data:/data
     labels:
       - "traefik.enable=true"
@@ -123,7 +123,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./bazarr:/config
+      - ${CONFIG_ROOT}/bazarr:/config
       - /data:/data
     labels:
       - "traefik.enable=true"
@@ -151,7 +151,7 @@ services:
       - TZ=${TIMEZONE}
       - DOCKER_MODS=ghcr.io/gabe565/linuxserver-mod-vuetorrent
     volumes:
-      - ./qbittorrent:/config
+      - ${CONFIG_ROOT}/qbittorrent:/config
       - /data/torrents:/data/torrents
     labels:
       - "traefik.enable=true"
@@ -178,7 +178,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./prowlarr:/config
+      - ${CONFIG_ROOT}/prowlarr:/config
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.entrypoints=web"

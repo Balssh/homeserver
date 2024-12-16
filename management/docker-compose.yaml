@@ -31,16 +31,12 @@ services:
       # - --certificatesresolvers.cloudflare.acme.dnschallenge=${DNS_CHALLENGE:-true}
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
       - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53,8.8.8.8:53,
-      # - --certificatesresolvers.cloudflare.acme.caserver=${LETS_ENCRYPT_CA_SERVER:-https://acme-v02.api.letsencrypt.org/directory}
       - --certificatesresolvers.cloudflare.acme.email=${CLOUDFLARE_EMAIL}
       - --certificatesresolvers.cloudflare.acme.storage=acme.json
     volumes:
-      # - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./traefik.yml:/traefik.yml:ro
-      - ./acme.json:/acme.json
-      # - ./config.yml:/config.yml:ro
-      - ./logs:/var/log/traefik
+      - ${CONFIG_ROOT}/traefik/acme.json:/acme.json
+      - ${CONFIG_ROOT}/traefik/logs:/var/log/traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=web"
@@ -57,6 +53,55 @@ services:
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=${DOMAIN}" #if you use the .home.yourdomain.co.uk entry you have to change the [0] into [1]
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${DOMAIN}" # same here, change 0 to 1
       - "traefik.http.routers.traefik-secure.service=api@internal"
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIG_ROOT}/portainer/data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)"
+      - "traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.portainer.middlewares=portainer-https-redirect"
+      - "traefik.http.routers.portainer-secure.entrypoints=web-secure"
+      - "traefik.http.routers.portainer-secure.rule=Host(`portainer.${DOMAIN}`)"
+      - "traefik.http.routers.portainer-secure.tls=true"
+      - "traefik.http.routers.portainer-secure.tls.certresolver=cloudflare"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    networks:
+      proxy:
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+    volumes:
+      - ${CONFIG_ROOT}/adguard/appdata/work:/opt/adguardhome/work
+      - ${CONFIG_ROOT}/adguard/confdir/conf:/opt/adguardhome/conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguard.entrypoints=web"
+      - "traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)"
+      - "traefik.http.middlewares.adguard-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.adguard.middlewares=adguard-https-redirect"
+      - "traefik.http.routers.adguard-secure.entrypoints=web-secure"
+      - "traefik.http.routers.adguard-secure.rule=Host(`adguard.${DOMAIN}`)"
+      - "traefik.http.routers.adguard-secure.tls=true"
+      - "traefik.http.routers.adguard-secure.tls.certresolver=cloudflare"
+      # This is inially on port 3000 and after the setup change to port 80
+      - "traefik.http.services.adguard.loadbalancer.server.port=80"
+
 
 networks:
   proxy:
